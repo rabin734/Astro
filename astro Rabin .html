@@ -1,0 +1,615 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RABIN Astrology</title>
+  <meta name="description" content="RABIN Astrology - Kundali & Palm Reading Consultation" />
+
+  <style>
+    :root{
+      --bg:#070712;
+      --card:rgba(255,255,255,0.06);
+      --border:rgba(255,255,255,0.14);
+      --text:#ffffff;
+      --muted:rgba(185,185,214,0.85);
+      --shadow:0 18px 50px rgba(0,0,0,0.45);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(170,120,255,0.18), transparent 55%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(255,170,90,0.14), transparent 60%),
+                  radial-gradient(900px 500px at 50% 100%, rgba(90,255,200,0.08), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+
+    .wrap{
+      width:min(1100px, 92vw);
+      margin:0 auto;
+      padding:22px 0 80px;
+    }
+
+    /* Topbar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      padding:14px 0;
+      background: linear-gradient(to bottom, rgba(7,7,18,0.92), rgba(7,7,18,0.55));
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:44px; height:44px;
+      border-radius:16px;
+      background: linear-gradient(135deg, rgba(170,120,255,0.8), rgba(255,170,90,0.75));
+      box-shadow: var(--shadow);
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      letter-spacing:0.5px;
+    }
+
+    .brand h1{
+      font-size:18px;
+      margin:0;
+      line-height:1.2;
+    }
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      font-size:14px;
+      cursor:pointer;
+      transition:transform 0.15s ease, background 0.15s ease;
+      user-select:none;
+    }
+    .pill:hover{ transform: translateY(-1px); background:rgba(255,255,255,0.06); }
+
+    .langToggle{
+      display:flex;
+      gap:8px;
+      padding:6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+    }
+    .langBtn{
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .langBtn.active{
+      background:rgba(255,255,255,0.10);
+      color:#fff;
+    }
+
+    /* Hero */
+    .hero{
+      margin-top:18px;
+      padding:26px;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      box-shadow: var(--shadow);
+    }
+
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .hero h2{
+      font-size:38px;
+      line-height:1.1;
+      margin:0 0 12px;
+      letter-spacing:-0.5px;
+    }
+    .hero .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.7;
+      max-width:60ch;
+    }
+
+    .ctaRow{
+      margin-top:18px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:13px 16px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      cursor:pointer;
+      font-weight:800;
+      transition:transform 0.15s ease, background 0.15s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,0.08); }
+
+    .btnPrimary{
+      border:0;
+      background: linear-gradient(135deg, rgba(170,120,255,0.9), rgba(255,170,90,0.85));
+      color:#0b0b16;
+    }
+
+    .heroCard{
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      padding:18px;
+      display:grid;
+      gap:12px;
+    }
+    .heroCard h3{ margin:0; font-size:16px; }
+    .heroCard p{ margin:0; color:var(--muted); line-height:1.7; font-size:14px; }
+
+    /* Sections */
+    .section{
+      margin-top:22px;
+      padding:22px;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .section h3{
+      margin:0 0 10px;
+      font-size:22px;
+    }
+    .section p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .card{
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      padding:18px;
+    }
+    .card h4{ margin:0 0 6px; font-size:18px; }
+    .card p{ margin:0; color:var(--muted); line-height:1.7; }
+
+    /* Form */
+    .form{
+      margin-top:14px;
+      display:grid;
+      gap:12px;
+      max-width:760px;
+    }
+    .field{
+      display:grid;
+      gap:8px;
+    }
+    label{
+      color:var(--muted);
+      font-size:13px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      outline:none;
+      font-size:15px;
+    }
+    textarea{ resize:vertical; min-height:110px; }
+
+    .note{
+      color:rgba(185,185,214,0.85);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    /* WhatsApp floating */
+    .waFloat{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:50;
+      width:56px; height:56px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.20);
+      background: linear-gradient(135deg, rgba(60,255,150,0.85), rgba(20,200,100,0.75));
+      display:grid;
+      place-items:center;
+      box-shadow: var(--shadow);
+      cursor:pointer;
+    }
+    .waFloat span{
+      font-size:24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px){
+      .heroGrid{ grid-template-columns:1fr; }
+      .hero h2{ font-size:32px; }
+      .grid2{ grid-template-columns:1fr; }
+      .topbar{ padding:12px 0; }
+      .pill{ padding:9px 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">RA</div>
+        <div>
+          <h1>RABIN Astrology</h1>
+          <p data-i18n="tagline">Kundali & Palm Reading Consultation</p>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="pill" href="#services" data-i18n="nav_services">Services</a>
+        <a class="pill" href="#about" data-i18n="nav_about">About</a>
+        <a class="pill" href="#contact" data-i18n="nav_contact">Contact</a>
+
+        <div class="langToggle">
+          <button id="btnEN" class="langBtn active" type="button">EN</button>
+          <button id="btnNP" class="langBtn" type="button">NP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="heroGrid">
+        <div>
+          <h2 data-i18n="hero_title">Know your path with clarity.</h2>
+          <p class="sub" data-i18n="hero_sub">
+            Professional Kundali Reading and Palm Reading consultation.
+            Honest guidance, simple explanation, and practical solutions.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn btnPrimary" href="#contact" data-i18n="cta_book">📩 Book Consultation</a>
+            <a class="btn" id="waDirectTop" href="#" data-i18n="cta_whatsapp">💬 WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="heroCard">
+          <h3 data-i18n="quick_title">Quick Services</h3>
+          <p data-i18n="quick_1">🔮 Kundali Reading (Birth Chart Analysis)</p>
+          <p data-i18n="quick_2">✋ Palm Reading (Haat Herne)</p>
+          <p data-i18n="quick_3">🧭 Career • Marriage • Health • Finance</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+      <h3 data-i18n="services_title">Services</h3>
+      <p data-i18n="services_sub">
+        Choose the service you need. You can submit your details directly through WhatsApp.
+      </p>
+
+      <div class="grid2">
+        <div class="card">
+          <h4 data-i18n="svc_k_title">🔮 Kundali Reading</h4>
+          <p data-i18n="svc_k_desc">
+            Detailed birth chart analysis with practical guidance for life decisions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h4 data-i18n="svc_p_title">✋ Palm Reading (Haat Herne)</h4>
+          <p data-i18n="svc_p_desc">
+            Palm line reading for personality, career, relationship, and life direction.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <h3 data-i18n="about_title">About</h3>
+      <p data-i18n="about_text">
+        Welcome to RABIN Astrology. Here you will get honest, simple, and clear consultation.
+        Your details are kept private. Consultation is done through WhatsApp or phone.
+      </p>
+    </section>
+
+    <!-- CONTACT + FORM -->
+    <section class="section" id="contact">
+      <h3 data-i18n="contact_title">Contact & Consultation Form</h3>
+      <p data-i18n="contact_sub">
+        Fill the form and submit. WhatsApp will open with your message ready.
+      </p>
+
+      <form id="waForm" class="form">
+        <div class="field">
+          <label data-i18n="f_name">Full Name</label>
+          <input id="name" required placeholder="Your name" data-i18n-ph="ph_name" />
+        </div>
+
+        <div class="field">
+          <label data-i18n="f_service">Service</label>
+          <select id="service">
+            <option value="Kundali Reading" data-i18n="opt_k">Kundali Reading</option>
+            <option value="Palm Reading (Haat Herne)" data-i18n="opt_p">Palm Reading (Haat Herne)</option>
+          </select>
+        </div>
+
+        <div class="grid2">
+          <div class="field">
+            <label data-i18n="f_dob">Birth Date</label>
+            <input id="dob" type="date" required />
+          </div>
+
+          <div class="field">
+            <label data-i18n="f_tob">Birth Time</label>
+            <input id="tob" type="time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label data-i18n="f_place">Birth Place</label>
+          <input id="place" required placeholder="City, District" data-i18n-ph="ph_place" />
+        </div>
+
+        <div class="field">
+          <label data-i18n="f_msg">Message (optional)</label>
+          <textarea id="msg" placeholder="Write your question..." data-i18n-ph="ph_msg"></textarea>
+        </div>
+
+        <button class="btn btnPrimary" type="submit" style="justify-content:center;">
+          💬 <span data-i18n="submit_btn">Submit to WhatsApp</span>
+        </button>
+
+        <div class="note" data-i18n="submit_note">
+          Note: Submit गरेपछि WhatsApp खुल्छ र तपाईंले Send थिच्नुपर्छ।
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- Floating WhatsApp -->
+  <a class="waFloat" id="waFloat" href="#" aria-label="WhatsApp">
+    <span>💬</span>
+  </a>
+
+  <script>
+    // =========================
+    // SETTINGS
+    // =========================
+    const waNumber = "9768382432";
+
+    // =========================
+    // i18n (EN/NP)
+    // =========================
+    const dict = {
+      en: {
+        tagline: "Kundali & Palm Reading Consultation",
+        nav_services: "Services",
+        nav_about: "About",
+        nav_contact: "Contact",
+
+        hero_title: "Know your path with clarity.",
+        hero_sub: "Professional Kundali Reading and Palm Reading consultation. Honest guidance, simple explanation, and practical solutions.",
+        cta_book: "📩 Book Consultation",
+        cta_whatsapp: "💬 WhatsApp",
+
+        quick_title: "Quick Services",
+        quick_1: "🔮 Kundali Reading (Birth Chart Analysis)",
+        quick_2: "✋ Palm Reading (Haat Herne)",
+        quick_3: "🧭 Career • Marriage • Health • Finance",
+
+        services_title: "Services",
+        services_sub: "Choose the service you need. You can submit your details directly through WhatsApp.",
+        svc_k_title: "🔮 Kundali Reading",
+        svc_k_desc: "Detailed birth chart analysis with practical guidance for life decisions.",
+        svc_p_title: "✋ Palm Reading (Haat Herne)",
+        svc_p_desc: "Palm line reading for personality, career, relationship, and life direction.",
+
+        about_title: "About",
+        about_text: "Welcome to RABIN Astrology. Here you will get honest, simple, and clear consultation. Your details are kept private. Consultation is done through WhatsApp or phone.",
+
+        contact_title: "Contact & Consultation Form",
+        contact_sub: "Fill the form and submit. WhatsApp will open with your message ready.",
+
+        f_name: "Full Name",
+        f_service: "Service",
+        f_dob: "Birth Date",
+        f_tob: "Birth Time",
+        f_place: "Birth Place",
+        f_msg: "Message (optional)",
+
+        opt_k: "Kundali Reading",
+        opt_p: "Palm Reading (Haat Herne)",
+
+        submit_btn: "Submit to WhatsApp",
+        submit_note: "Note: After submit, WhatsApp opens and you need to tap Send.",
+
+        ph_name: "Your name",
+        ph_place: "City, District",
+        ph_msg: "Write your question..."
+      },
+
+      np: {
+        tagline: "कुण्डली तथा हात हेर्ने परामर्श",
+        nav_services: "सेवाहरू",
+        nav_about: "परिचय",
+        nav_contact: "सम्पर्क",
+
+        hero_title: "आफ्नो बाटो स्पष्टतासँग बुझ्नुहोस्।",
+        hero_sub: "कुण्डली अध्ययन र हात हेर्ने पेशागत परामर्श। सरल भाषामा स्पष्ट मार्गदर्शन र व्यवहारिक सुझाव।",
+        cta_book: "📩 परामर्श लिनुहोस्",
+        cta_whatsapp: "💬 WhatsApp",
+
+        quick_title: "छिटो सेवाहरू",
+        quick_1: "🔮 कुण्डली हेर्ने (जन्मकुण्डली अध्ययन)",
+        quick_2: "✋ हात हेर्ने (Palm Reading)",
+        quick_3: "🧭 करियर • विवाह • स्वास्थ्य • आर्थिक",
+
+        services_title: "सेवाहरू",
+        services_sub: "तपाईंलाई चाहिएको सेवा छान्नुहोस्। विवरण WhatsApp मार्फत सिधै पठाउन सकिन्छ।",
+        svc_k_title: "🔮 कुण्डली हेर्ने",
+        svc_k_desc: "जन्मकुण्डलीको विस्तृत अध्ययन, जीवनका निर्णयहरूमा व्यवहारिक मार्गदर्शन।",
+        svc_p_title: "✋ हात हेर्ने",
+        svc_p_desc: "हातका रेखाबाट स्वभाव, करियर, सम्बन्ध, र जीवनदिशा बारे जानकारी।",
+
+        about_title: "परिचय",
+        about_text: "RABIN Astrology मा तपाईंलाई स्पष्ट, सरल र इमानदार परामर्श दिइन्छ। तपाईंका विवरण गोप्य राखिन्छ। परामर्श WhatsApp वा फोनबाट गरिन्छ।",
+
+        contact_title: "सम्पर्क तथा परामर्श फारम",
+        contact_sub: "फारम भर्नुहोस् र Submit गर्नुहोस्। WhatsApp मा message तयार भएर खुल्छ।",
+
+        f_name: "पूरा नाम",
+        f_service: "सेवा",
+        f_dob: "जन्म मिति",
+        f_tob: "जन्म समय",
+        f_place: "जन्म स्थान",
+        f_msg: "सन्देश (optional)",
+
+        opt_k: "कुण्डली हेर्ने",
+        opt_p: "हात हेर्ने",
+
+        submit_btn: "WhatsApp मा पठाउनुहोस्",
+        submit_note: "नोट: Submit गरेपछि WhatsApp खुल्छ र तपाईंले Send थिच्नुपर्छ।",
+
+        ph_name: "तपाईंको नाम",
+        ph_place: "नगर/जिल्ला",
+        ph_msg: "आफ्नो प्रश्न लेख्नुहोस्..."
+      }
+    };
+
+    let currentLang = "en";
+
+    function setLang(lang){
+      currentLang = lang;
+
+      document.getElementById("btnEN").classList.toggle("active", lang === "en");
+      document.getElementById("btnNP").classList.toggle("active", lang === "np");
+
+      // text nodes
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if(dict[lang][key]) el.textContent = dict[lang][key];
+      });
+
+      // placeholders
+      document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+        const key = el.getAttribute("data-i18n-ph");
+        if(dict[lang][key]) el.setAttribute("placeholder", dict[lang][key]);
+      });
+
+      // service select option text
+      // (values stay in English for clean WhatsApp message)
+      const optK = document.querySelector("#service option:nth-child(1)");
+      const optP = document.querySelector("#service option:nth-child(2)");
+      optK.textContent = dict[lang]["opt_k"];
+      optP.textContent = dict[lang]["opt_p"];
+    }
+
+    document.getElementById("btnEN").addEventListener("click", () => setLang("en"));
+    document.getElementById("btnNP").addEventListener("click", () => setLang("np"));
+
+    // =========================
+    // WhatsApp direct links
+    // =========================
+    const waBase = `https://wa.me/${waNumber}`;
+
+    document.getElementById("waFloat").setAttribute("href", waBase);
+    document.getElementById("waDirectTop").setAttribute("href", waBase);
+
+    // =========================
+    // Form submit -> WhatsApp
+    // =========================
+    document.getElementById("waForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const service = document.getElementById("service").value.trim();
+      const dob = document.getElementById("dob").value.trim();
+      const tob = document.getElementById("tob").value.trim();
+      const place = document.getElementById("place").value.trim();
+      const msg = document.getElementById("msg").value.trim();
+
+      const heading = currentLang === "np"
+        ? "🙏 RABIN Astrology परामर्श"
+        : "🙏 RABIN Astrology Consultation";
+
+      const text =
+`${heading}
+
+👤 Name: ${name}
+🔮 Service: ${service}
+
+📅 Birth Date: ${dob}
+⏰ Birth Time: ${tob || "Not provided"}
+📍 Birth Place: ${place}
+
+📝 Message: ${msg || "No extra message"}`;
+
+      const url = `${waBase}?text=${encodeURIComponent(text)}`;
+
+      // IMPORTANT: open in same tab for mobile reliability
+      window.location.href = url;
+    });
+
+    // Default language
+    setLang("en");
+  </script>
+</body>
+</html>
